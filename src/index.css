@@ -8,9 +8,10 @@ body {
 
 #root {
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 /* attempts grid */
@@ -77,13 +78,13 @@ body {
 .keyboard-row {
   display: flex;
   width: 100%;
-  max-width: 445px;
+  max-width: 400px;
   justify-content: center;
   gap: 5px;
 }
 
 button {
-  flex: 0 1 40px;
+  flex: 0 1 36px;
   height: 55px;
   cursor: pointer;
   color: ivory;
