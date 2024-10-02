@@ -15,7 +15,7 @@ function App() {
   const [attempts, setAttempts] = useState(initialArr);
   const [currAttempt, setCurrAttempt] = useState(0);
 
-  const nextNullIndex = attempts[currAttempt].indexOf(null);
+  const nextNullIndex = attempts[currAttempt]?.indexOf(null);
   const currentIndex = (nextNullIndex === -1 ? WORD_LENGTH : nextNullIndex) - 1;
 
   function handleLetter(letter) {
@@ -35,7 +35,7 @@ function App() {
   }
 
   function handleBack() {
-    if (nextNullIndex === 0) return;
+    if (currentIndex === -1) return;
     setAttempts(
       attempts.map((row, i) => {
         if (currAttempt === i) {
