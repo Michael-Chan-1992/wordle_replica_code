@@ -94,11 +94,38 @@ button {
   font-weight: bold;
 }
 
+button.none {
+  background-color: rgb(56, 56, 56);
+}
+
 .keyboard-row:last-child button:first-child,
 .keyboard-row:last-child button:last-child {
   flex: 1 1 40px;
   max-width: 70px;
   font-size: 0.8em;
+}
+
+/* Popup */
+.popup-container {
+  position: relative;
+}
+
+.popup {
+  background-color: ivory;
+  color: black;
+  font-size: 0.8em;
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.fade-out {
+  transition: opacity 1s ease-in-out;
+  opacity: 0;
 }
 
 /* Animation */

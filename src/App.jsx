@@ -6,6 +6,15 @@ import { WORDS } from "./words";
 const WORD_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
 
+const WIN_PHRASE = {
+  0: "Perfect",
+  1: "Excellent",
+  2: "Very good",
+  3: "Nice",
+  4: "Not bad",
+  5: "Phew",
+};
+
 const ANSWER = WORDS[Math.floor(Math.random() * WORDS.length)];
 console.log(ANSWER);
 
@@ -14,7 +23,9 @@ const initialArr = Array(MAX_ATTEMPTS).fill(Array(WORD_LENGTH).fill(null));
 function App() {
   const [attempts, setAttempts] = useState(initialArr);
   const [checks, setChecks] = useState(initialArr);
+  const [keyboardChecks, setKeyboardChecks] = useState({});
   const [currAttempt, setCurrAttempt] = useState(0);
+  const [notification, setNotification] = useState("");
 
   const nextNullIndex = attempts[currAttempt]?.indexOf(null);
   const currentIndex = (nextNullIndex === -1 ? WORD_LENGTH : nextNullIndex) - 1;
@@ -24,8 +35,20 @@ function App() {
     row.classList.add("shake");
   }
 
+  function showNotification(message, fadeNotification = true) {
+    setNotification(message);
+    const noti = document.getElementById("notification");
+    noti.classList.remove("fade-out");
+    if (fadeNotification) {
+      setTimeout(() => {
+        noti.classList.add("fade-out");
+      }, 1000);
+    }
+  }
+
   useEffect(() => {
     const row = document.getElementById(`row${currAttempt}`);
+    if (!row) return;
     function removeShake() {
       row.classList.remove("shake");
     }
@@ -70,13 +93,9 @@ function App() {
       const currWords = attempts[currAttempt].join("").toLowerCase();
 
       if (!WORDS.includes(currWords)) {
-        console.log("Not in word list");
+        showNotification("Not in word list");
         shakeRow();
         return;
-      }
-
-      if (currWords === ANSWER) {
-        console.log("Win");
       }
 
       const checkResult = [];
@@ -86,6 +105,10 @@ function App() {
         if (answerArr[i] === letter) {
           answerArr[i] = "#";
           checkResult.push("correct");
+          setKeyboardChecks((c) => ({
+            ...c,
+            [letter]: "correct",
+          }));
           return;
         }
 
@@ -102,19 +125,41 @@ function App() {
             i === currWords.lastIndexOf(letter)
           ) {
             checkResult.push("position");
+            if (keyboardChecks[letter] !== "correct") {
+              setKeyboardChecks((c) => ({
+                ...c,
+                [letter]: "position",
+              }));
+            }
             return;
           }
         }
         checkResult.push("none");
+        setKeyboardChecks((c) => ({
+          ...c,
+          [letter]: "none",
+        }));
       });
 
       setChecks(
         checks.map((row, i) => (currAttempt === i ? checkResult : row))
       );
 
+      if (currWords === ANSWER) {
+        showNotification(WIN_PHRASE[currAttempt], false);
+        setCurrAttempt(-1);
+        return;
+      }
+
+      if (currAttempt === MAX_ATTEMPTS - 1) {
+        showNotification(ANSWER.toUpperCase(), false);
+        setCurrAttempt(-1);
+        return;
+      }
+
       setCurrAttempt((prev) => prev + 1);
     } else {
-      console.log("Not enough letters");
+      showNotification("Not enough letters");
       shakeRow();
     }
   }
@@ -122,12 +167,18 @@ function App() {
   return (
     <>
       <h1>Wordle Replica</h1>
-      <AttemptsDisplay attempts={attempts} checks={checks} />
+      <div className="popup-container">
+        <p className="popup fade-out" id="notification">
+          {notification}
+        </p>
+        <AttemptsDisplay attempts={attempts} checks={checks} />
+      </div>
       <Keyboard
         disabled={currAttempt >= MAX_ATTEMPTS}
         onLetter={handleLetter}
         onBack={handleBack}
         onEnter={handleEnter}
+        keyStyle={keyboardChecks}
       />
     </>
   );

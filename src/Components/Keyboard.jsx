@@ -4,7 +4,13 @@ const KEYBOARD_LAYOUT = [
   ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "BACK"],
 ];
 
-export default function Keyboard({ onLetter, onBack, onEnter, disabled }) {
+export default function Keyboard({
+  onLetter,
+  onBack,
+  onEnter,
+  disabled,
+  keyStyle,
+}) {
   function handleClick(e) {
     if (e.target.tagName !== "BUTTON" || disabled) return;
     switch (e.target.textContent) {
@@ -23,7 +29,11 @@ export default function Keyboard({ onLetter, onBack, onEnter, disabled }) {
       {KEYBOARD_LAYOUT.map((row, i) => (
         <div className="keyboard-row" key={`keyboard-row${i}`}>
           {row.map((key) => (
-            <Key key={key} keyValue={key} />
+            <Key
+              key={key}
+              keyValue={key}
+              keyStyle={keyStyle[key.toLowerCase()]}
+            />
           ))}
         </div>
       ))}
@@ -31,6 +41,6 @@ export default function Keyboard({ onLetter, onBack, onEnter, disabled }) {
   );
 }
 
-function Key({ keyValue }) {
-  return <button>{keyValue}</button>;
+function Key({ keyValue, keyStyle }) {
+  return <button className={keyStyle}>{keyValue}</button>;
 }
