@@ -28,6 +28,10 @@ body {
   justify-content: center;
 }
 
+.shake {
+  animation: shake 50ms 6 alternate;
+}
+
 .cell {
   display: flex;
   align-items: center;
@@ -115,6 +119,16 @@ button {
 
   to {
     scale: 1;
+  }
+}
+
+@keyframes shake {
+  from {
+    transform: translateX(3px)
+  }
+
+  to {
+    transform: translateX(-3px);
   }
 }
 

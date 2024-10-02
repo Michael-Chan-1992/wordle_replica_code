@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AttemptsDisplay from "./Components/AttemptsDisplay";
 import Keyboard from "./Components/Keyboard";
 import { WORDS } from "./words";
@@ -18,6 +18,20 @@ function App() {
 
   const nextNullIndex = attempts[currAttempt]?.indexOf(null);
   const currentIndex = (nextNullIndex === -1 ? WORD_LENGTH : nextNullIndex) - 1;
+
+  function shakeRow() {
+    const row = document.getElementById(`row${currAttempt}`);
+    row.classList.add("shake");
+  }
+
+  useEffect(() => {
+    const row = document.getElementById(`row${currAttempt}`);
+    function removeShake() {
+      row.classList.remove("shake");
+    }
+    row.addEventListener("animationend", removeShake);
+    return () => row.removeEventListener("animationend", removeShake);
+  });
 
   function handleLetter(letter) {
     if (nextNullIndex === -1) return;
@@ -57,6 +71,7 @@ function App() {
 
       if (!WORDS.includes(currWords)) {
         console.log("Not in word list");
+        shakeRow();
         return;
       }
 
@@ -100,6 +115,7 @@ function App() {
       setCurrAttempt((prev) => prev + 1);
     } else {
       console.log("Not enough letters");
+      shakeRow();
     }
   }
 

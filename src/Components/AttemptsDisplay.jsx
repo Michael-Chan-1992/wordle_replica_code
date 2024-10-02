@@ -2,7 +2,7 @@ export default function AttemptsDisplay({ attempts, checks }) {
   return (
     <div className="attempts">
       {attempts.map((row, i) => (
-        <div className="row shake" key={`row${i}`}>
+        <div className="row" key={`row${i}`} id={`row${i}`}>
           {row.map((letter, j) => (
             <Attempt
               letter={letter}
