@@ -3,16 +3,62 @@ import AttemptsDisplay from "./Components/AttemptsDisplay";
 import Keyboard from "./Components/Keyboard";
 
 const WORD_LENGTH = 5;
-const MAX_TRIES = 6;
-const initialArr = Array(MAX_TRIES).fill(Array(WORD_LENGTH).fill("A"));
+const MAX_ATTEMPTS = 6;
+const initialArr = Array(MAX_ATTEMPTS).fill(Array(WORD_LENGTH).fill(null));
 
 function App() {
   const [attempts, setAttempts] = useState(initialArr);
+  const [currAttempt, setCurrAttempt] = useState(0);
+
+  const nextNullIndex = attempts[currAttempt]?.indexOf(null);
+  const currentIndex = (nextNullIndex === -1 ? WORD_LENGTH : nextNullIndex) - 1;
+
+  function handleLetter(letter) {
+    if (nextNullIndex === -1) return;
+    setAttempts(
+      attempts.map((row, i) => {
+        if (currAttempt === i) {
+          return [
+            ...row.slice(0, nextNullIndex),
+            letter,
+            ...row.slice(nextNullIndex + 1),
+          ];
+        }
+        return row;
+      })
+    );
+  }
+
+  function handleBack() {
+    if (nextNullIndex === 0) return;
+    setAttempts(
+      attempts.map((row, i) => {
+        if (currAttempt === i) {
+          return [
+            ...row.slice(0, currentIndex),
+            null,
+            ...row.slice(currentIndex + 1),
+          ];
+        }
+        return row;
+      })
+    );
+  }
+
+  function handleEnter() {
+    setCurrAttempt((prev) => prev + 1);
+  }
+
   return (
     <>
       <h1>Wordle Replica</h1>
       <AttemptsDisplay attempts={attempts} />
-      <Keyboard />
+      <Keyboard
+        disabled={currAttempt >= MAX_ATTEMPTS}
+        onLetter={handleLetter}
+        onBack={handleBack}
+        onEnter={handleEnter}
+      />
     </>
   );
 }

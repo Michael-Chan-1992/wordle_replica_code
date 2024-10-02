@@ -4,9 +4,22 @@ const KEYBOARD_LAYOUT = [
   ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "BACK"],
 ];
 
-export default function Keyboard() {
+export default function Keyboard({ onLetter, onBack, onEnter, disabled }) {
+  function handleClick(e) {
+    if (e.target.tagName !== "BUTTON" || disabled) return;
+    switch (e.target.textContent) {
+      case "ENTER":
+        onEnter();
+        break;
+      case "BACK":
+        onBack();
+        break;
+      default:
+        onLetter(e.target.textContent);
+    }
+  }
   return (
-    <div className="keyboard">
+    <div className="keyboard" onClick={handleClick}>
       {KEYBOARD_LAYOUT.map((row, i) => (
         <div className="keyboard-row" key={`keyboard-row${i}`}>
           {row.map((key) => (
