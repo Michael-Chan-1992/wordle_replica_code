@@ -1,16 +1,21 @@
 import { useState } from "react";
 import AttemptsDisplay from "./Components/AttemptsDisplay";
 import Keyboard from "./Components/Keyboard";
+import { WORDS } from "./words";
 
 const WORD_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
+
+const ANSWER = WORDS[Math.floor(Math.random() * WORDS.length)].toUpperCase();
+console.log(ANSWER);
+
 const initialArr = Array(MAX_ATTEMPTS).fill(Array(WORD_LENGTH).fill(null));
 
 function App() {
   const [attempts, setAttempts] = useState(initialArr);
   const [currAttempt, setCurrAttempt] = useState(0);
 
-  const nextNullIndex = attempts[currAttempt]?.indexOf(null);
+  const nextNullIndex = attempts[currAttempt].indexOf(null);
   const currentIndex = (nextNullIndex === -1 ? WORD_LENGTH : nextNullIndex) - 1;
 
   function handleLetter(letter) {
