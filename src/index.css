@@ -35,6 +35,21 @@ body {
   border: 2px grey solid;
 }
 
+.none {
+  background-color: grey;
+  border-color: grey;
+}
+
+.correct {
+  background-color: green;
+  border-color: green;
+}
+
+.position {
+  border-color: GoldenRod;
+  background-color: GoldenRod;
+}
+
 /* keyboard */
 .keyboard {
   display: flex;

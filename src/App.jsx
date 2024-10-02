@@ -82,7 +82,6 @@ function App() {
             new RegExp(letter, "g")
           ).length;
 
-          console.log(letterAnswerOcurrence, letterAttemptOcurrence);
           if (
             letterAnswerOcurrence >= letterAttemptOcurrence ||
             i === currWords.lastIndexOf(letter)
