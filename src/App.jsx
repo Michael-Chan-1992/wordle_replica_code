@@ -51,7 +51,11 @@ function App() {
   }
 
   function handleEnter() {
-    setCurrAttempt((prev) => prev + 1);
+    if (currentIndex === WORD_LENGTH - 1) {
+      setCurrAttempt((prev) => prev + 1);
+    } else {
+      console.log("Not enough letters");
+    }
   }
 
   return (
