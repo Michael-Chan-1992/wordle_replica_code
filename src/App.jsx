@@ -26,6 +26,7 @@ function App() {
   const [keyboardChecks, setKeyboardChecks] = useState({});
   const [currAttempt, setCurrAttempt] = useState(0);
   const [notification, setNotification] = useState("");
+  const [shake, setShake] = useState(false);
 
   const nextNullIndex = attempts[currAttempt]?.indexOf(null);
   const currentIndex = (nextNullIndex === -1 ? WORD_LENGTH : nextNullIndex) - 1;
@@ -33,6 +34,7 @@ function App() {
   function shakeRow() {
     const row = document.getElementById(`row${currAttempt}`);
     row.classList.add("shake");
+    setShake(true);
   }
 
   function showNotification(message, fadeNotification = true) {
@@ -48,13 +50,14 @@ function App() {
 
   useEffect(() => {
     const row = document.getElementById(`row${currAttempt}`);
-    if (!row) return;
+    if (!row || !shake) return;
     function removeShake() {
       row.classList.remove("shake");
+      setShake(false);
     }
     row.addEventListener("animationend", removeShake);
     return () => row.removeEventListener("animationend", removeShake);
-  });
+  }, [shake]);
 
   function handleLetter(letter) {
     if (nextNullIndex === -1) return;
@@ -174,7 +177,7 @@ function App() {
         <AttemptsDisplay attempts={attempts} checks={checks} />
       </div>
       <Keyboard
-        disabled={currAttempt >= MAX_ATTEMPTS}
+        disabled={currAttempt === -1}
         onLetter={handleLetter}
         onBack={handleBack}
         onEnter={handleEnter}
