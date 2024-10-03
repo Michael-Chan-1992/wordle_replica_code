@@ -97,6 +97,8 @@ button {
   border-radius: 5px;
   font-size: 1.1em;
   font-weight: bold;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 button.none {

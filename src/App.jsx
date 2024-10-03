@@ -51,13 +51,16 @@ function App() {
   useEffect(() => {
     const row = document.getElementById(`row${currAttempt}`);
     if (!row || !shake) return;
-    function removeShake() {
+
+    const removeShake = () => {
       row.classList.remove("shake");
       setShake(false);
-    }
+    };
+
     row.addEventListener("animationend", removeShake);
+
     return () => row.removeEventListener("animationend", removeShake);
-  }, [shake]);
+  }, [shake, currAttempt]);
 
   function handleLetter(letter) {
     if (nextNullIndex === -1) return;
