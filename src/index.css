@@ -1,3 +1,9 @@
+:root {
+  --dark-gray: rgb(55, 55, 55);
+  --very-dark-gray: rgb(30, 30, 30);
+
+}
+
 body {
   background-color: black;
   color: ivory;
@@ -6,8 +12,23 @@ body {
   margin: 0;
 }
 
+#root>header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 20px 0;
+}
+
+.open-button {
+  background: none;
+  border: none;
+  color: ivory;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
 h1 {
-  margin-bottom: 0;
+  margin: 0;
 }
 
 #root {
@@ -77,6 +98,7 @@ h1 {
   align-items: center;
   gap: 5px;
   padding-bottom: 30px;
+  margin: 0 10px;
 }
 
 .keyboard-row {
@@ -87,7 +109,7 @@ h1 {
   gap: 5px;
 }
 
-button {
+.keyboard button {
   flex: 0 1 36px;
   height: 55px;
   cursor: pointer;
@@ -101,8 +123,16 @@ button {
   user-select: none;
 }
 
+button.correct {
+  background-color: green;
+}
+
+button.position {
+  background-color: GoldenRod;
+}
+
 button.none {
-  background-color: rgb(56, 56, 56);
+  background-color: var(--dark-gray);
 }
 
 .keyboard-row:last-child button:first-child,
@@ -112,7 +142,7 @@ button.none {
   font-size: 0.8em;
 }
 
-/* Popup */
+/* popup */
 .popup-container {
   position: relative;
 }
@@ -135,7 +165,83 @@ button.none {
   opacity: 0;
 }
 
-/* Animation */
+/* modal */
+.modal-content header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--very-dark-gray);
+  padding: 20px 30px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 20px;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: repeat(4, 40px);
+  grid-template-rows: repeat(2, 1fr);
+  place-items: center;
+  justify-content: space-around;
+  font-size: 2em;
+  font-weight: normal;
+}
+
+.heading {
+  font-size: 0.4em;
+  text-align: center;
+  align-self: flex-start;
+}
+
+.bar-chart {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  grid-template-rows: repeat(6, 1fr);
+  row-gap: 5px;
+  font-size: 0.9em;
+}
+
+.guess {
+  padding: 3px;
+}
+
+.bar {
+  background-color: var(--dark-gray);
+  padding: 3px 5px;
+  text-align: end;
+}
+
+.bar.current {
+  background-color: green;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  color: ivory;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* animation */
 @keyframes flip {
   from {
     rotate: x 0deg;

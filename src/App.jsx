@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AttemptsDisplay from "./Components/AttemptsDisplay";
 import Keyboard from "./Components/Keyboard";
 import { WORDS } from "./words";
+import Statistics from "./Components/Statistics";
 
 const WORD_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
@@ -19,6 +20,16 @@ const ANSWER = WORDS[Math.floor(Math.random() * WORDS.length)];
 console.log(ANSWER);
 
 const initialArr = Array(MAX_ATTEMPTS).fill(Array(WORD_LENGTH).fill(null));
+const initialStat = {
+  currentStreak: 0,
+  maxStreak: 0,
+  played: 0,
+  guess: [0, 0, 0, 0, 0, 0],
+};
+
+const localStorageStat = localStorage.getItem("stat");
+const stat = localStorageStat ? JSON.parse(localStorageStat) : initialStat;
+let winAttempt = null;
 
 function App() {
   const [attempts, setAttempts] = useState(initialArr);
@@ -27,6 +38,11 @@ function App() {
   const [currAttempt, setCurrAttempt] = useState(0);
   const [notification, setNotification] = useState("");
   const [shake, setShake] = useState(false);
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   const nextNullIndex = attempts[currAttempt]?.indexOf(null);
   const currentIndex = (nextNullIndex === -1 ? WORD_LENGTH : nextNullIndex) - 1;
@@ -61,6 +77,25 @@ function App() {
 
     return () => row.removeEventListener("animationend", removeShake);
   }, [shake, currAttempt]);
+
+  function saveStat(win) {
+    stat.played++;
+    if (win) {
+      stat.guess[currAttempt]++;
+      stat.currentStreak++;
+      stat.maxStreak =
+        stat.currentStreak > stat.maxStreak
+          ? stat.currentStreak
+          : stat.maxStreak;
+    } else {
+      stat.currentStreak = 0;
+    }
+
+    localStorage.setItem("stat", JSON.stringify(stat));
+    setTimeout(() => {
+      openModal();
+    }, 2000);
+  }
 
   function handleLetter(letter) {
     if (nextNullIndex === -1) return;
@@ -153,12 +188,15 @@ function App() {
 
       if (currWords === ANSWER) {
         showNotification(WIN_PHRASE[currAttempt], false);
+        winAttempt = currAttempt;
+        saveStat(true);
         setCurrAttempt(-1);
         return;
       }
 
       if (currAttempt === MAX_ATTEMPTS - 1) {
         showNotification(ANSWER.toUpperCase(), false);
+        saveStat(false);
         setCurrAttempt(-1);
         return;
       }
@@ -172,7 +210,12 @@ function App() {
 
   return (
     <>
-      <h1>Wordle Replica</h1>
+      <header>
+        <h1>Wordle Replica</h1>
+        <button className="open-button" onClick={openModal}>
+          📊
+        </button>
+      </header>
       <div className="popup-container">
         <p className="popup fade-out" id="notification">
           {notification}
@@ -186,6 +229,13 @@ function App() {
         onEnter={handleEnter}
         keyStyle={keyboardChecks}
       />
+      {isModalOpen && (
+        <Statistics
+          onClose={closeModal}
+          stat={stat}
+          greenBarIndex={winAttempt}
+        />
+      )}
     </>
   );
 }
