@@ -4,6 +4,7 @@ import Keyboard from "./Components/Keyboard";
 import { WORDS } from "./words";
 import Statistics from "./Components/Statistics";
 
+const VERSION = "1.0.0";
 const WORD_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
 
@@ -27,8 +28,14 @@ const initialStat = {
   guess: [0, 0, 0, 0, 0, 0],
 };
 
+const localStorageVersion = localStorage.getItem("version");
+if (localStorageVersion !== VERSION) {
+  localStorage.clear();
+  localStorage.setItem("version", VERSION);
+}
 const localStorageStat = localStorage.getItem("stat");
 const stat = localStorageStat ? JSON.parse(localStorageStat) : initialStat;
+
 let winAttempt = null;
 
 function App() {
