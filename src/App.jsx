@@ -38,7 +38,7 @@ function App() {
   const [currAttempt, setCurrAttempt] = useState(0);
   const [notification, setNotification] = useState("");
   const [shake, setShake] = useState(false);
-
+  const [keyboardDisabled, setKeyboardDisabled] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
 
   const openModal = () => setModalOpen(true);
@@ -76,6 +76,37 @@ function App() {
 
     return () => row.removeEventListener("animationend", removeShake);
   }, [shake, currAttempt]);
+
+  useEffect(() => {
+    const attempts = document.querySelector(".attempts");
+
+    const disableKeyboard = (e) => {
+      if (
+        e.animationName === "flip" &&
+        e.target ===
+          document.querySelector(`#row${currAttempt - 1} :first-child`)
+      ) {
+        setKeyboardDisabled(true);
+      }
+    };
+    const enableKeyboard = (e) => {
+      if (
+        e.animationName === "flip" &&
+        e.target ===
+          document.querySelector(`#row${currAttempt - 1} :last-child`)
+      ) {
+        setKeyboardDisabled(false);
+      }
+    };
+
+    attempts.addEventListener("animationstart", disableKeyboard);
+    attempts.addEventListener("animationend", enableKeyboard);
+
+    return () => {
+      attempts.removeEventListener("animationstart", disableKeyboard);
+      attempts.removeEventListener("animationend", enableKeyboard);
+    };
+  }, [currAttempt]);
 
   function saveStat(win) {
     stat.played++;
@@ -191,6 +222,7 @@ function App() {
         showNotification(WIN_PHRASE[currAttempt]);
         winAttempt = currAttempt;
         saveStat(true);
+        setKeyboardDisabled(true);
         setCurrAttempt(-1);
         return;
       }
@@ -198,6 +230,7 @@ function App() {
       if (currAttempt === MAX_ATTEMPTS - 1) {
         showNotification(ANSWER.toUpperCase());
         saveStat(false);
+        setKeyboardDisabled(true);
         setCurrAttempt(-1);
         return;
       }
@@ -228,7 +261,7 @@ function App() {
         />
       </div>
       <Keyboard
-        disabled={currAttempt === -1}
+        disabled={keyboardDisabled}
         onLetter={handleLetter}
         onBack={handleBack}
         onEnter={handleEnter}
