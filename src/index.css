@@ -125,6 +125,7 @@ h1 {
   font-weight: bold;
   -webkit-user-select: none;
   user-select: none;
+  transition-delay: 1600ms;
 }
 
 button.correct {
