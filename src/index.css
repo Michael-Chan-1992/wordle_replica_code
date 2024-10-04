@@ -91,6 +91,10 @@ h1 {
   transition-duration: 600ms;
 }
 
+.jump.animate {
+  animation: flip 300ms 2 alternate, jump 2000ms 1;
+}
+
 /* keyboard */
 .keyboard {
   display: flex;
@@ -269,6 +273,24 @@ button.none {
 
   to {
     transform: translateX(-3px);
+  }
+}
+
+@keyframes jump {
+  0% {
+    transform: translateY(0px)
+  }
+
+  80% {
+    transform: translateY(0px)
+  }
+
+  90% {
+    transform: translateY(-40px)
+  }
+
+  100% {
+    transform: translateY(0px)
   }
 }
 

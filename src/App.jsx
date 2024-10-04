@@ -53,15 +53,14 @@ function App() {
     setShake(true);
   }
 
-  function showNotification(message, fadeNotification = true) {
+  function showNotification(message) {
     setNotification(message);
     const noti = document.getElementById("notification");
     noti.classList.remove("fade-out");
-    if (fadeNotification) {
-      setTimeout(() => {
-        noti.classList.add("fade-out");
-      }, 1000);
-    }
+
+    setTimeout(() => {
+      noti.classList.add("fade-out");
+    }, 1000);
   }
 
   useEffect(() => {
@@ -94,7 +93,7 @@ function App() {
     localStorage.setItem("stat", JSON.stringify(stat));
     setTimeout(() => {
       openModal();
-    }, 2000);
+    }, 4000);
   }
 
   function handleLetter(letter) {
@@ -189,7 +188,7 @@ function App() {
       );
 
       if (currWords === ANSWER) {
-        showNotification(WIN_PHRASE[currAttempt], false);
+        showNotification(WIN_PHRASE[currAttempt]);
         winAttempt = currAttempt;
         saveStat(true);
         setCurrAttempt(-1);
@@ -197,7 +196,7 @@ function App() {
       }
 
       if (currAttempt === MAX_ATTEMPTS - 1) {
-        showNotification(ANSWER.toUpperCase(), false);
+        showNotification(ANSWER.toUpperCase());
         saveStat(false);
         setCurrAttempt(-1);
         return;
@@ -222,7 +221,11 @@ function App() {
         <p className="popup fade-out" id="notification">
           {notification}
         </p>
-        <AttemptsDisplay attempts={attempts} checks={checks} />
+        <AttemptsDisplay
+          attempts={attempts}
+          checks={checks}
+          jumpRow={winAttempt}
+        />
       </div>
       <Keyboard
         disabled={currAttempt === -1}
