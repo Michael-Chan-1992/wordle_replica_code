@@ -186,12 +186,14 @@ function App() {
       }
 
       const checkResult = [];
+      const tempKeyboardcheck = {};
       const answerArr = ANSWER.split("");
       attempts[currAttempt].forEach((letter, i) => {
         letter = letter.toLowerCase();
         if (answerArr[i] === letter) {
           answerArr[i] = "#";
           checkResult.push("correct");
+          tempKeyboardcheck[letter] = "correct";
           setKeyboardChecks((c) => ({
             ...c,
             [letter]: "correct",
@@ -212,7 +214,11 @@ function App() {
             i === currWords.lastIndexOf(letter)
           ) {
             checkResult.push("position");
-            if (keyboardChecks[letter] !== "correct") {
+            if (
+              keyboardChecks[letter] !== "correct" &&
+              tempKeyboardcheck[letter] !== "correct"
+            ) {
+              tempKeyboardcheck[letter] = "position";
               setKeyboardChecks((c) => ({
                 ...c,
                 [letter]: "position",
@@ -223,7 +229,7 @@ function App() {
         }
 
         checkResult.push("none");
-        if (keyboardChecks[letter]) return;
+        if (keyboardChecks[letter] || tempKeyboardcheck[letter]) return;
         setKeyboardChecks((c) => ({
           ...c,
           [letter]: "none",
