@@ -175,7 +175,9 @@ function App() {
             return;
           }
         }
+
         checkResult.push("none");
+        if (keyboardChecks[letter]) return;
         setKeyboardChecks((c) => ({
           ...c,
           [letter]: "none",
