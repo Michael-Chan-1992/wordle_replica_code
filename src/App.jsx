@@ -53,14 +53,23 @@ function App() {
     setShake(true);
   }
 
-  function showNotification(message) {
+  function showNotification(message, delay = false) {
     setNotification(message);
     const noti = document.getElementById("notification");
-    noti.classList.remove("fade-out");
 
-    setTimeout(() => {
-      noti.classList.add("fade-out");
-    }, 1000);
+    setTimeout(
+      () => {
+        noti.classList.remove("fade-out");
+      },
+      delay ? 1600 : 0
+    );
+
+    setTimeout(
+      () => {
+        noti.classList.add("fade-out");
+      },
+      delay ? 2600 : 1000
+    );
   }
 
   useEffect(() => {
@@ -219,7 +228,7 @@ function App() {
       );
 
       if (currWords === ANSWER) {
-        showNotification(WIN_PHRASE[currAttempt]);
+        showNotification(WIN_PHRASE[currAttempt], true);
         winAttempt = currAttempt;
         saveStat(true);
         setKeyboardDisabled(true);
@@ -228,7 +237,7 @@ function App() {
       }
 
       if (currAttempt === MAX_ATTEMPTS - 1) {
-        showNotification(ANSWER.toUpperCase());
+        showNotification(ANSWER.toUpperCase(), true);
         saveStat(false);
         setKeyboardDisabled(true);
         setCurrAttempt(-1);
