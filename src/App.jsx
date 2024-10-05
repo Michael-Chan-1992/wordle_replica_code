@@ -8,6 +8,12 @@ const VERSION = "1.0.0";
 const WORD_LENGTH = 5;
 const MAX_ATTEMPTS = 6;
 
+const NOTI_TYPE = {
+  error: "error",
+  win: "win",
+  lose: "lose",
+};
+
 const WIN_PHRASE = {
   0: "Perfect",
   1: "Excellent",
@@ -60,23 +66,26 @@ function App() {
     setShake(true);
   }
 
-  function showNotification(message, delay = false) {
+  function showNotification({ message, type }) {
     setNotification(message);
     const noti = document.getElementById("notification");
 
-    setTimeout(
-      () => {
-        noti.classList.remove("fade-out");
-      },
-      delay ? 1600 : 0
-    );
-
-    setTimeout(
-      () => {
+    if (type === NOTI_TYPE.error) {
+      noti.classList.remove("fade-out");
+      setTimeout(() => {
         noti.classList.add("fade-out");
-      },
-      delay ? 2600 : 1000
-    );
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        noti.classList.remove("fade-out");
+      }, 1600);
+
+      if (type === NOTI_TYPE.win) {
+        setTimeout(() => {
+          noti.classList.add("fade-out");
+        }, 3000);
+      }
+    }
   }
 
   useEffect(() => {
@@ -180,7 +189,10 @@ function App() {
       const currWords = attempts[currAttempt].join("").toLowerCase();
 
       if (!WORDS.includes(currWords)) {
-        showNotification("Not in word list");
+        showNotification({
+          message: "Not in word list",
+          type: NOTI_TYPE.error,
+        });
         shakeRow();
         return;
       }
@@ -241,7 +253,10 @@ function App() {
       );
 
       if (currWords === ANSWER) {
-        showNotification(WIN_PHRASE[currAttempt], true);
+        showNotification({
+          message: WIN_PHRASE[currAttempt],
+          type: NOTI_TYPE.win,
+        });
         winAttempt = currAttempt;
         saveStat(true);
         setKeyboardDisabled(true);
@@ -250,7 +265,10 @@ function App() {
       }
 
       if (currAttempt === MAX_ATTEMPTS - 1) {
-        showNotification(ANSWER.toUpperCase(), true);
+        showNotification({
+          message: ANSWER.toUpperCase(),
+          type: NOTI_TYPE.lose,
+        });
         saveStat(false);
         setKeyboardDisabled(true);
         setCurrAttempt(-1);
@@ -259,7 +277,10 @@ function App() {
 
       setCurrAttempt((prev) => prev + 1);
     } else {
-      showNotification("Not enough letters");
+      showNotification({
+        message: "Not enough letters",
+        type: NOTI_TYPE.error,
+      });
       shakeRow();
     }
   }

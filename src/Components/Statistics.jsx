@@ -8,12 +8,10 @@ export default function Statistics({ onClose, stat, greenBarIndex }) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <header>
-          <p>STATISTICS</p>
-          <button className="close-button" onClick={onClose}>
-            ❎
-          </button>
-        </header>
+        <p>STATISTICS</p>
+        <button className="close-button" onClick={onClose}>
+          ❎
+        </button>
         <div className="stat">
           <div>{stat.played}</div>
           <div>{winPercent}</div>
