@@ -43,6 +43,37 @@ h1 {
   overflow: hidden;
 }
 
+a {
+  text-decoration: none;
+  font-size: 24px;
+  padding-block: 1px;
+}
+
+.arrow_box {
+  position: absolute;
+  padding: 2px;
+  top: 45px;
+  left: -38px;
+  background: green;
+}
+
+.arrow_box:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: "";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.arrow_box:before {
+  border-bottom-color: green;
+  border-width: 12px;
+  margin-left: -12px;
+}
+
 /* attempts grid */
 .attempts {
   display: grid;

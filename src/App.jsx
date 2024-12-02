@@ -24,7 +24,7 @@ const WIN_PHRASE = {
 };
 
 const ANSWER = WORDS[Math.floor(Math.random() * WORDS.length)];
-console.log(ANSWER);
+if (import.meta.env.MODE === "development") console.log(ANSWER);
 
 const initialArr = Array(MAX_ATTEMPTS).fill(Array(WORD_LENGTH).fill(null));
 const initialStat = {
@@ -301,13 +301,34 @@ function App() {
     return () => document.removeEventListener("keydown", handleKeyboardEnter);
   }, [attempts, currAttempt, keyboardDisabled]);
 
+  useEffect(() => {
+    const notesAds = document.querySelector(".arrow_box");
+    setTimeout(() => {
+      notesAds.remove();
+    }, 5000);
+  }, []);
+
   return (
     <>
       <header>
         <h1>Wordle Replica</h1>
-        <button className="open-button" onClick={openModal}>
-          📊
-        </button>
+        <div style={{ position: "relative" }}>
+          <div className="arrow_box">Try notes app</div>
+          <a
+            href="https://michael-chan-1992.github.io/notes/"
+            target="_blank"
+            title="Notes app"
+          >
+            📓
+          </a>
+          <button
+            className="open-button"
+            onClick={openModal}
+            title="Statistics"
+          >
+            📊
+          </button>
+        </div>
       </header>
       <div className="popup-container">
         <p className="popup fade-out" id="notification">
