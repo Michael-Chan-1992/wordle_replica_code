@@ -285,6 +285,22 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    function handleKeyboardEnter(e) {
+      if (keyboardDisabled) return;
+      if (e.key === "Enter") {
+        handleEnter();
+      } else if (e.key === "Backspace") {
+        handleBack();
+      } else if (e.key.match(/^[a-z]$/i)) {
+        handleLetter(e.key.toUpperCase());
+      }
+    }
+    document.addEventListener("keydown", handleKeyboardEnter);
+
+    return () => document.removeEventListener("keydown", handleKeyboardEnter);
+  }, [attempts, currAttempt, keyboardDisabled]);
+
   return (
     <>
       <header>
